@@ -1,6 +1,15 @@
 ﻿<#
     .Synopsys
-    Validate the input.
+    Validates the server and sets the global variable 'ver'. 
+
+    .Description
+    Confirms the server is reachable, enumerates the OS, and confirms access.
+
+    .INPUT
+    The server name
+
+    .OUTPUT
+    The OS version or False
 
     .Parameter SERVER
     The server to validate.
@@ -16,9 +25,9 @@ function Validate-Input{
         )
     Try{
         $test = Get-WmiObject win32_operatingsystem -ComputerName $SERVER -ErrorAction Stop
-        if($test.Version -match "^6.3*" -and $test.ProductType -eq "3"){$return = "Win2012R2"}
-        elseif($test.Version -match "^10.0*" -and $test.ProductType -eq "3"){$return = "Win2016"}
-        elseif($test.Version -match "^6.1*" -and $test.ProductType -eq "3"){$return = "Win2008R2"}
+        if($test.Version -match "^6.3*" -and $test.ProductType -eq "3"){$return = "WIN2012R2"}
+        elseif($test.Version -match "^10.0*" -and $test.ProductType -eq "3"){$return = "WIN2016"}
+        elseif($test.Version -match "^6.1*" -and $test.ProductType -eq "3"){$return = "WIN2008R2"}
         else{
             Write-Host "The OS Version, $test.Version, is not supported"
             $return = "false"
@@ -43,6 +52,6 @@ function Validate-Input{
             $return = "false"
             }
         }
-    return $return
+    $Global:ver = $return
 }
 Export-ModuleMember -Function Validate-Input

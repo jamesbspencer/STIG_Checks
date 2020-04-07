@@ -25,7 +25,6 @@ function V-40177 {
             ("CREATOR OWNER","FullControl","ContainerInherit, ObjectInherit","InheritOnly"),
             ("ALL APPLICATION PACKAGES","ReadAndExecute","ContainerInherit, ObjectInherit","None")
             )
-        Write-Host $array
         $folders = "Program Files", "Program Files (x86)"
         foreach($folder in $folders){
             $array2 = [System.Collections.ArrayList]@()
@@ -52,9 +51,7 @@ function V-40177 {
                 [void]$temp_array.Add($perm.PropagationFlags)
                 [void]$array2.Add($temp_array)
                 }
-            write-host $array2
             $compare = Compare-Object -ReferenceObject $array2 -DifferenceObject $array
-            write-host $compare
             if($compare.count -gt "0"){
                 $result = "a"
                 }

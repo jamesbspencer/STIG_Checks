@@ -1,6 +1,7 @@
 ﻿Remove-Variable * -ErrorAction SilentlyContinue
 Get-Module -name WIN* | Remove-Module -ErrorAction SilentlyContinue
 Remove-Module -name helpers -ErrorAction SilentlyContinue
+. $PSScriptRoot/Create-Manifest.ps1
 
 Try{
     Import-Module -Name $PSScriptRoot\helpers\helpers.psd1 -ErrorAction Stop -WarningAction SilentlyContinue
@@ -29,10 +30,13 @@ if(!$args[0]){
     }
 else{$servers = $args[0]}
 
-$output = New-Object System.Collections.ArrayList
+#Read the config file and set the ini hashtable.
+Read-ini
+
+$output = New-Object System.Collections.Hashtable
 foreach($server in $servers){
-    $ver = Validate-Input -SERVER $server
-   if($ver -eq "false"){
+    Validate-Input -SERVER $server
+    if($ver -eq "false"){
         Remove-Module -name helpers
         exit
         }
@@ -43,7 +47,7 @@ foreach($server in $servers){
         Write-Host "Something went wrong importing the STIG check functions."
         exit
         }
-    $s_output = New-Object System.Collections.ArrayList
+    $output[$server] = @{}
     $V_functions = (Get-Module -name $ver).ExportedCommands.Keys | Sort-Object {$_ -replace '\D+',""}
     foreach($V_function in $V_functions){
         $g_id = $V_function
@@ -63,15 +67,10 @@ foreach($server in $servers){
                 }
             }
         $return = Write-Status -SERVER $server -ID $g_id -STATUS $g_stat
-        [void]$s_output.Add($server)
-        [void]$s_output.Add($g_id)
-        [void]$s_output.Add($return)
-        [void]$output.Add($s_output)
+        $output[$server][$g_id] = $return
         }
-
+    $output.$server | Out-File -FilePath "$PSScriptRoot\$(get-date -Format FileDateTime)-$server.txt"
     Remove-Module -Name $ver
 }
 
 Remove-Module -name helpers
-
-$output | Out-File -FilePath "$PSScriptRoot\$(get-date -Format FileDateTime).txt"

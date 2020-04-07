@@ -14,9 +14,18 @@ function V-57645 {
         [Parameter(Mandatory=$true,ValueFromPipeline=$true)]
         $SERVER
         )
-    $result = "b"
-    
+    $me = $MyInvocation.MyCommand.Name
+    if ($Global:ini.$Global:ver.$me -match "^T"){
+        $result = "b"
+        }
+    elseif($Global:ini.$Global:ver.$me -match "^F"){
+        $result = "a"
+        }
+    elseif($Global:ini.$Global:ver.$me -match "^N"){
+        $result = "c"
+        }
+    else{$result = "d"}
     return $result
     }
 Export-ModuleMember -Function V-57645
-#Run Create-Manifest.ps1 when finished. 
+#Run Create-Manifest.ps1 when finished.

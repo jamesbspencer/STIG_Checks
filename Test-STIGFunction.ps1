@@ -1,11 +1,17 @@
-﻿$server = "RADFB7111V11896"
+﻿$server = Read-Host -Prompt "Server name?"
 $num = Read-host -Prompt "Which function number?"
 $item = Get-ChildItem $PSScriptRoot\*\*-$num.psm1 -Recurse
-$test = "d"
+$test = "e"
 
-Import-Module -Name $PSScriptRoot\helpers\Write-Status.psm1 -Verbose
+. $PSScriptRoot/Create-Manifest.ps1
+
+Import-Module -Name $PSScriptRoot\helpers\helpers.psd1 -Verbose
 Import-Module -name $item -Verbose -ErrorAction SilentlyContinue
 Get-Module
+
+$local_ver = Validate-Input $server
+
+Read-ini
 
 $function = "V-$num"
 
@@ -13,5 +19,5 @@ $test = & $function -SERVER $server
 write-status -SERVER $server -ID $function -STATUS $test
 
 
-Remove-Module -Name Write-Status
+Remove-Module -Name helpers
 Remove-module -name $function -ErrorAction SilentlyContinue
