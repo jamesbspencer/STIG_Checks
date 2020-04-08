@@ -73,4 +73,6 @@ foreach($server in $servers){
     Remove-Module -Name $ver
 }
 
+if($ini.GLOBAL.POPULATE_CHECKLIST){Export-ResultsToChecklist -ARRAY $output}
+
 Remove-Module -name helpers
