@@ -9,9 +9,9 @@ Import-Module -Name $PSScriptRoot\helpers\helpers.psd1 -Verbose
 Import-Module -name $item -Verbose -ErrorAction SilentlyContinue
 Get-Module
 
-$local_ver = Validate-Input $server
-
 Read-ini
+
+$local_ver = Validate-Input $server
 
 $function = "V-$num"
 

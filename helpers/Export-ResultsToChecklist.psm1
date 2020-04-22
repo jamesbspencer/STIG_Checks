@@ -1,6 +1,6 @@
 ﻿<#
     .Synopsys
-    Populates the Checklist with results 
+    Populates the Checklist with results from the script.
 
     .Parameter ARRAY
     A hashtable array of STIG results.
@@ -18,16 +18,26 @@ function Export-ResultsToChecklist {
     $servers = $array.keys
     foreach($server in $servers){
         TRY{
-            [xml]$xml = Get-Content -Path "$ckl_path\*$server*.ckl" -ErrorAction stop
-            foreach($key in $array.$server.keys){
-                $status = $($array.$server.$key)
-                $xml.CHECKLIST.STIGS.iSTIG.VULN.Where({$_.STIG_DATA.ATTRIBUTE_DATA -eq $key}).Item(0).STATUS = $status
-                }
+            $ckl_file = Get-ChildItem -Path "$ckl_path\*$server*.ckl" -Exclude "*populated*" -ErrorAction Stop
+            [xml]$xml = Get-Content -Path $ckl_file.FullName
             }
         CATCH{
-            Write-Host "Unable to load file"
-            exit
+            Write-Host "Unable to Checklist file for $server"
+            continue
             }
+        foreach($key in $array.$server.keys){
+                $status = ($array.$server.$key -split "[,-]")[0]
+                $findings = ($array.$server.$key -split "[,-]")[1]
+                $comments = ($array.$server.$key -split "[,-]")[2]
+                $xml.CHECKLIST.STIGS.iSTIG.VULN.Where({$_.STIG_DATA.ATTRIBUTE_DATA -eq $key}).Item(0).STATUS = $status
+                if(-not ($findings -eq $null)){
+                    $xml.CHECKLIST.STIGS.iSTIG.VULN.Where({$_.STIG_DATA.ATTRIBUTE_DATA -eq $key}).item(0).FINDING_DETAILS = $findings
+                    }
+                if(-not ($comments -eq $null)){
+                    $xml.CHECKLIST.STIGS.iSTIG.VULN.Where({$_.STIG_DATA.ATTRIBUTE_DATA -eq $key}).item(0).COMMENTS = $comments
+                    }
+
+                }
 
         $xmlSettings = New-Object -TypeName System.Xml.XmlWriterSettings
         $xmlSettings.Indent = $true
@@ -37,6 +47,7 @@ function Export-ResultsToChecklist {
         $xmlWriter = [System.Xml.XmlWriter]::Create("$ckl_path\$(Get-Date -Format FileDate)-$server-populated.ckl",$xmlSettings)
 
         $xml.Save($xmlWriter)
+        $xmlWriter.Close()
 
         }
     }
