@@ -141,7 +141,14 @@ foreach($server in $servers){
                 $output[$server][$v_id] = $return
                 } #End foreach cmd_file
         } # End UNX
-    $output.$server | Out-File -FilePath "$PSScriptRoot\$(get-date -Format FileDateTime)-$server.txt"
+    if($ini.GLOBAL.CREATE_LOGS -eq $true){
+        Write-Host $ini.GLOBAL.CREATE_LOGS
+        if(-not $(Resolve-Path -Path $ini.GLOBAL.LOG_FOLDER -ErrorAction SilentlyContinue)){
+            write-host "Path does not exist"
+            New-Item -ItemType Directory -Path $ini.GLOBAL.LOG_FOLDER -InformationAction SilentlyContinue
+            }
+        $output.$server | Out-File -FilePath "$($ini.GLOBAL.LOG_FOLDER)\$(get-date -Format FileDateTime)-$server.txt"
+        }
 }
 
 if($ini.GLOBAL.POPULATE_CHECKLIST){Export-ResultsToChecklist -ARRAY $output}

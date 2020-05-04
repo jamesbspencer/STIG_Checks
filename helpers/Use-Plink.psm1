@@ -54,7 +54,7 @@ function Use-Plink {
     [void]$opts.Add("-batch")
 
     # See if we're using pageant.
-    if($AGENT){
+    if($AGENT -eq $true -or $ini.PUTTY.USE_PAGEANT -eq $true){
         Try{
             get-command -name pageant -ErrorAction Stop | Out-Null
             Get-Process -name pageant -ErrorAction stop | Out-Null
@@ -70,6 +70,10 @@ function Use-Plink {
 
     #Are we using a jump server?
     if($JUMP){
+        if(-not (Test-Path $(Join-Path "HKCU:\Software\SimonTatham\PuTTY\Sessions" $JUMP))){
+            Write-Verbose "No jump server session saved for $JUMP"
+            return $false
+            }
         [void]$opts.Add("$JUMP")
         [void]$opts.Add("$SERVER")
         }

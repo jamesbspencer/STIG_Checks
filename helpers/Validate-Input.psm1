@@ -35,8 +35,14 @@ function Validate-Input{
     if($alive){
         $rttl = ($ping | Measure-Object -Property ResponseTimeToLive -Average).Average
         Switch ($rttl){
-            {$_ -le 65 -or $_ -gt 128}{$os = "UNX"}
-            {$_ -gt 65 -and $_ -le 128}{$os = "WIN"}
+            {$_ -le 65 -or $_ -gt 128}{
+                $os = "UNX"
+                Write-Verbose "$os"
+                }
+            {$_ -gt 65 -and $_ -le 128}{
+                $os = "WIN"
+                Write-Verbose "$os"
+                }
             }
         }
     if($os -eq "WIN"){
@@ -74,6 +80,7 @@ function Validate-Input{
     elseif($os -eq "UNX" -and $ini.PUTTY.USE_JUMP_SERVER -eq $false){
         # The Module Use-Plink should be loaded.
         #Do we have a key for the server?
+        Write-Verbose "Not using jump server"
         $reg_key = $(Get-ItemProperty -Path HKCU:\Software\SimonTatham\PuTTY\SshHostKeys) -match $server
         if(! $reg_key){echo y | plink -load $server}
 
@@ -89,6 +96,7 @@ function Validate-Input{
         }
     #If we couldn't ping it, but we're using a jump proxy, it must be a UNIX box. 
     elseif($ini.PUTTY.USE_JUMP_SERVER){
+        Write-Verbose "Using a jump server"
         #Do we have a key for the server?
         $reg_key = $(Get-ItemProperty -Path HKCU:\Software\SimonTatham\PuTTY\SshHostKeys) -match $server
         if(! $reg_key){echo y | plink -load $($ini.PUTTY.JUMP_SERVER_PROXY) $server}
