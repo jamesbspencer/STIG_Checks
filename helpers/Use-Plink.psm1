@@ -96,6 +96,7 @@ function Use-Plink {
         $processinfo.RedirectStandardError = $true
         $processinfo.RedirectStandardOutput = $true
         $processinfo.UseShellExecute = $false
+        $processinfo.CreateNoWindow = $true
         $processinfo.Arguments = $opts
         $process = New-Object -TypeName System.Diagnostics.Process
         $process.StartInfo = $processinfo
@@ -104,8 +105,9 @@ function Use-Plink {
         $output = $process.StandardOutput.ReadToEnd()
         $errors = $process.StandardError.ReadToEnd()
 
-        Write-Verbose "Plink output: $output" -Verbose
-        $result = ($output.split([System.Environment]::NewLine))[-1]
+        Write-Verbose "Plink output: $output"
+        $result = ($output.split([System.Environment]::NewLine,[System.StringSplitOptions]::RemoveEmptyEntries))[-1]
+        Write-Verbose "Plink result: $result"
         }
     Catch{
         # Uh oh

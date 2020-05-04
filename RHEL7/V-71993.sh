@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # V-71993 Don't reboot on Ctrl-Alt-Del
 
 result='d'

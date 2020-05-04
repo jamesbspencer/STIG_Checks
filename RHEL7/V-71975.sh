@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # V-71975 AIDE check
 
 result='d'

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # V-72009 All files and directories must have a group
 
 result='d'

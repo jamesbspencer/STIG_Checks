@@ -127,9 +127,9 @@ foreach($server in $servers){
             ## Need to implement the ini file. 
 
             # The Use-Plink module should already be loaded.
-            $cmd_files = Get-ChildItem -Path "$PSScriptRoot\$ver\V*.txt"
+            $cmd_files = Get-ChildItem -Path "$PSScriptRoot\$ver\V*.sh"
             foreach($cmd_file in $cmd_files){
-                $v_id = $cmd_file.Name -replace ".txt",""
+                $v_id = $cmd_file.BaseName
                 $status = $null
                 if($ini.PUTTY.USE_JUMP_SERVER){
                     $status = Use-Plink -JUMP $ini.PUTTY.JUMP_SERVER_PROXY -Server $server -COMMAND $cmd_file

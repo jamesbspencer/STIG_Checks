@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # V-71999 Patches must be installed and up to date.
 
 result='d'

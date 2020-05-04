@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # V-72017 Home directories must be 750 or less.
 
 result='d'

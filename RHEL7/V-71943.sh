@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # V-71943 Lock account for 15 minutes after 3 unsuccessful attempts. 
 
 result="d"

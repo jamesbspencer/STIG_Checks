@@ -5,10 +5,14 @@ $num = Read-host -Prompt "Which function number?"
 $id = "V-$num"
 $test = "e"
 
+$VerbosePreference = "Continue"
+
+$root_path = $path = ((Get-Item $PSScriptRoot).Parent).FullName
+
 . $PSScriptRoot/Create-Manifest.ps1
 
 write-host "Importing Modules"
-Import-Module -Name $PSScriptRoot\helpers\helpers.psd1 -Verbose
+Import-Module -Name $PSScriptRoot\helpers.psd1 -Verbose
 
 write-host "Reading ini"
 Read-ini
@@ -32,7 +36,7 @@ if($ini.keys -match $local_ver -and $ini.$local_ver.Keys -match $id){
     else{$test = "d"}
     }
 else{
-    $item = Get-ChildItem -Path $PSScriptRoot\$local_ver\$id.txt
+    $item = Get-ChildItem -Path $root_path\$local_ver\$id.sh
     Write-Host "The file to run is: $item"
 
 
@@ -52,4 +56,4 @@ else{
 Write-Status -SERVER $server -ID $id -STATUS $test
 
 write-host "Removing functions"
-Remove-Module -Name helpers
+Remove-Module -Name helpers -InformationAction SilentlyContinue

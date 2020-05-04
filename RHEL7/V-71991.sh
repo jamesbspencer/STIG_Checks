@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # V-71991  SELinux target policy.
 
 result='d'

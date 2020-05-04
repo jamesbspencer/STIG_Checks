@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # V-71965 Multifactor authentication
 
 result='d'

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # V-71989 SELinux must be enabled
 
 result='d'

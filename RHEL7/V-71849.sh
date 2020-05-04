@@ -1,5 +1,10 @@
+#!/bin/bash
+
 # V-71849 File permissions of applications must maintain permisssions.
+
 result="d"
+
+
 for i in `sudo rpm -Va | egrep -i '^\.[M|U|G|.]{8}' | cut -d " " -f4,5`
 do
 	for j in `sudo rpm -qf $i`
@@ -17,6 +22,8 @@ do
 		fi
 	done
 done
+
+
 if [ "$result" != "a" ]
 then
 	result="b"

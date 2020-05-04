@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # V-71971 SELinux user mappings
 
 result='d'

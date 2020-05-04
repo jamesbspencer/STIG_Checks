@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # V-71945 Lock account for 15 minutes after 3 unsuccessful root login attempts. 
 
 result='d'

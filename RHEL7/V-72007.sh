@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # V-72007 All files and directories must have an owner
 
 result='d'
