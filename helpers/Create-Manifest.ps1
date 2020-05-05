@@ -1,4 +1,4 @@
-﻿$folders = Get-ChildItem ((Get-Item $PSScriptRoot).Parent).FullName -Directory -Exclude "RHEL*"
+﻿$folders = Get-ChildItem ((Get-Item $PSScriptRoot).Parent).FullName -Directory | where {$_.name -match "WIN*"-or $_.name -match "helpers"}
 
 foreach($folder in $folders){
     Clear-Variable -Name nested_modules -ErrorAction SilentlyContinue
