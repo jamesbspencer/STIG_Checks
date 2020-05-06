@@ -12,10 +12,10 @@ Catch{
 Get-Module -Name Save-ScapToChecklist
 
 # List of servers
-$servers = "radfa0a31v12035","radfa0a31v12036","RADFW6DYL1PX314"
+$servers = "server1","server2","server3"
 
 # Where our SCAP XCCDF Results files are located.
-$scap_path = "\\user-smb4.local.altess.army.mil\windows_ops\RDP\Users\SpencerJ\GCSS-A\Lin_SCAP"
+$scap_path = "\"
 
 # Where our Checklist template or Checklists are being stored. 
 $checklist_folder = "$PSScriptRoot\checklists"
